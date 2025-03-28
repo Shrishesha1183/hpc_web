@@ -41,13 +41,33 @@
         >
         </div>
         <!-- Removed the backdrop-blur-sm div -->
-        <div class="relative h-full flex items-center justify-center">
+        <div class="relative h-full flex flex-col items-center justify-center">
             <div class="glass-card p-12 max-w-4xl mx-4 rounded-3xl border border-white/20 relative z-10 hover:scale-[1.02] transition-transform duration-500">
                 <h1 class="text-2xl md:text-5xl font-bold gradient-text animate-fade-in">Department of </h1>
-                <h1 class="text-4xl md:text-7xl font-bold gradient-text mb-4 leading-tight animate-fade-in-delay">High Performance Computing</h1>
-                <p class="text-xl text-gray-700 typewriter-text">
+                <h1 class="text-5xl md:text-8xl font-bold gradient-text mb-4 leading-tight animate-fade-in-delay">High Performance Computing</h1>
+                <p class="text-xl md:text-2xl text-gray-700 animate-fade-in-delay">
                     Empowering future innovators through excellence in education, research, and technology.
                 </p>
+            </div>
+            <div class="flex justify-center space-x-4 mt-8 relative z-10">
+                <a 
+                    href="/staff" 
+                    class="glass-card p-3 rounded-3xl flex items-center space-x-2"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span>Our Faculty</span>
+                </a>
+                <a 
+                    href="/events" 
+                    class="glass-card p-3 rounded-3xl flex items-center space-x-2"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>Events</span>
+                </a>
             </div>
         </div>
     </div>
@@ -70,7 +90,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
                         </div>
-                        <h2 class="text-xl md:text-3xl font-bold text-white">About Us</h2>
+                        <h2 class="text-3xl md:text-5xl font-bold gradient-text-w">About Us</h2>
                     </div>
                     <p class="text-sm md:text-lg text-gray-100 leading-relaxed max-w-4xl mx-auto text-center px-2 md:px-4 overflow-auto whitespace-pre-wrap">
                         {$homePageContent?.aboutUs || 'Loading about us...'}
@@ -94,7 +114,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                             </svg>
                         </div>
-                        <h2 class="text-xl md:text-3xl font-bold text-white">Vision</h2>
+                        <h2 class="text-3xl md:text-5xl font-bold gradient-text-w">Vision</h2>
                     </div>
                     <p class="text-sm md:text-lg text-gray-100 leading-relaxed max-w-4xl mx-auto text-center px-2 md:px-4 overflow-auto whitespace-pre-wrap">
                         {$homePageContent?.vision || 'Loading vision...'}
@@ -117,7 +137,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                             </svg>
                         </div>
-                        <h2 class="text-xl md:text-3xl font-bold text-white">Mission</h2>
+                        <h2 class="text-3xl md:text-5xl font-bold gradient-text-w">Mission</h2>
                     </div>
                     <p class="text-sm md:text-lg text-gray-100 leading-relaxed max-w-4xl mx-auto text-center px-2 md:px-4 overflow-auto whitespace-pre-wrap">
                         {$homePageContent?.mission || 'Loading mission...'}
