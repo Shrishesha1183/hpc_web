@@ -13,6 +13,7 @@
 	let staffForm = {
 		name: '',
 		role: '',
+		isHOD: false,
 		photoUrl: '',
 		email: '',
 		phone: '',
@@ -32,6 +33,7 @@
 		staffForm = {
 			name: '',
 			role: '',
+			isHOD: false,
 			photoUrl: '',
 			email: '',
 			phone: '',
@@ -53,7 +55,8 @@
 			photoUrl: staff.photoUrl,
 			email: staff.email,
 			phone: staff.phone || '',
-            priority: staff.priority,
+            priority: staff.priority || 0,
+			isHOD: staff.isHOD || false,
 			department: staff.department,
 			qualifications: [...staff.qualifications],
 			specialization: staff.specialization || '',
@@ -80,7 +83,7 @@
 	}
 
 	async function handleSubmit() {
-		try {
+        try {
             // Set priority based on role
             const priority = STAFF_PRIORITIES[staffForm.role as keyof typeof STAFF_PRIORITIES] || 999;
             staffForm.priority = priority;
@@ -97,10 +100,19 @@
 				throw new Error('Please fill in all required fields');
 			}
 
+			if (!staffForm.isHOD && !staffForm.priority) {
+				throw new Error('Priority is required for non-HOD staff members');
+			}
+
+			const staffData = {
+				...staffForm,
+				priority: staffForm.isHOD ? 0 : staffForm.priority
+			};
+
 			if (isEditingStaff && selectedStaff?.id) {
-				await updateStaffMember(selectedStaff.id, staffForm);
+				await updateStaffMember(selectedStaff.id, staffData);
 			} else {
-				await addStaffMember(staffForm);
+				await addStaffMember(staffData);
 			}
 
 			resetForm();
@@ -156,6 +168,38 @@
 								class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
 								required
 							/>
+						</div>
+
+						<!-- In the form section -->
+						<div class="grid gap-6 md:grid-cols-2">
+							<div>
+								<label class="flex items-center space-x-2">
+									<input
+										type="checkbox"
+										bind:checked={staffForm.isHOD}
+										class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+									/>
+									<span class="text-sm font-medium text-gray-700">Head of Department</span>
+								</label>
+							</div>
+
+							{#if !staffForm.isHOD}
+								<div>
+									<label for="priority" class="block text-sm font-medium text-gray-700 mb-2">
+										Priority (1 being highest)*
+									</label>
+									<input
+										type="number"
+										id="priority"
+										bind:value={staffForm.priority}
+										min="1"
+										max="99"
+										class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+										required={!staffForm.isHOD}
+									/>
+									<p class="mt-1 text-sm text-gray-500">Lower number means higher priority</p>
+								</div>
+							{/if}
 						</div>
 
                         <div>
@@ -362,17 +406,17 @@
 						</div>
 						<div class="text-sm text-gray-500 space-y-1 mb-4">
 							<p class="flex items-center">
-								<span class="material-icons-outlined mr-2 text-blue-500">email</span>
+								<span class="material-icons-outlined mr-2 text-blue-500">Email:</span>
 								{staff.email}
 							</p>
 							{#if staff.phone}
 								<p class="flex items-center">
-									<span class="material-icons-outlined mr-2 text-blue-500">phone</span>
+									<span class="material-icons-outlined mr-2 text-blue-500">Phone:</span>
 									{staff.phone}
 								</p>
 							{/if}
 							<p class="flex items-center">
-								<span class="material-icons-outlined mr-2 text-blue-500">business</span>
+								<span class="material-icons-outlined mr-2 text-blue-500">Department:</span>
 								{staff.department}
 							</p>
 						</div>

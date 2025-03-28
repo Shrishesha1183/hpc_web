@@ -6,7 +6,12 @@
 	let selectedStaff: typeof $staffMembers[number] | null = null;
 	let activeTab = 'details';
 
-	$: sortedStaffMembers = [...$staffMembers].sort((a, b) => a.priority - b.priority);
+	$: sortedStaffMembers = [...$staffMembers].sort((a, b) => {
+		if (a.isHOD) return -1;
+		if (b.isHOD) return 1;
+		return (a.priority || 999) - (b.priority || 999);
+	});
+
 	$: groupedStaff = sortedStaffMembers.reduce((groups, staff) => {
 		const role = staff.role;
 		if (!groups[role]) {
@@ -15,7 +20,6 @@
 		groups[role].push(staff);
 		return groups;
 	}, {} as Record<string, typeof $staffMembers>);
-
 	$: prioritizedRoles = Object.entries(groupedStaff)
 		.sort(([roleA], [roleB]) => {
 			const priorityA = STAFF_PRIORITIES[roleA as keyof typeof STAFF_PRIORITIES] || 999;
@@ -23,6 +27,21 @@
 			return priorityA - priorityB;
 		})
 		.map(([role]) => role);
+
+	$: staffByPriority = sortedStaffMembers.reduce((acc, staff) => {
+		if (!staff.isHOD) {
+			const priority = staff.priority || 999;
+			if (!acc[priority]) {
+				acc[priority] = [];
+			}
+			acc[priority].push(staff);
+		}
+		return acc;
+	}, {} as Record<number, typeof $staffMembers>);
+
+	$: priorityNumbers = Object.keys(staffByPriority)
+		.map(Number)
+		.sort((a, b) => a - b);
 
 	onMount(() => {
 		fetchStaffMembers();
@@ -43,16 +62,47 @@
 <main class="container mx-auto px-4 py-8">
     <h1 class="text-4xl font-bold gradient-text text-center mb-12">Our Faculties</h1>
     
+    <!-- HOD Section -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+    {#if groupedStaff['HOD']}
+        <div class="flex flex-col items-center mb-16">
+            <h2 class="text-2xl font-semibold gradient-text text-center mb-8">Head of Department</h2>
+            <div class="w-full max-w-7xl flex justify-center">
+                {#each groupedStaff['HOD'] as staff}
+                    <div
+                        class="group cursor-pointer overflow-hidden rounded-3xl bg-white shadow-lg transition-transform hover:scale-105 w-[320px]"
+                        on:click={() => openStaffModal(staff)}
+                    >
+                        <div class="relative h-[360px]">
+                            <img
+                                src={staff.photoUrl}
+                                alt={staff.name}
+                                class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                            />
+                        </div>
+                        <div class="p-6 text-center">
+                            <h3 class="text-xl font-semibold gradient-text">{staff.name}</h3>
+                            <p class="text-gray-600 mt-2">{staff.role}</p>
+                        </div>
+                    </div>
+                {/each}
+            </div>
+        </div>
+    {/if}
+
+    <!-- Other Staff Members -->
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
     <div class="flex flex-col items-center space-y-16">
-        {#each prioritizedRoles as role}
+		<h2 class="text-2xl font-semibold gradient-text text-center mb-8">Professors</h2>
+        {#each priorityNumbers as priority}
             <section class="w-full">
-                <h2 class="text-2xl font-semibold gradient-text text-center mb-8">{role}</h2>
                 <div class="flex justify-center">
                     <div class="w-full max-w-7xl">
-                        <div class="flex flex-wrap justify-center gap-64">
-                            {#each groupedStaff[role] as staff}
-                                <!-- svelte-ignore a11y_click_events_have_key_events -->
-                                <!-- svelte-ignore a11y_no_static_element_interactions -->
+                        <div class="flex flex-wrap justify-center gap-8">
+                            {#each staffByPriority[priority] as staff}
+								{#if (staff.priority ?? 999) < 999}
                                 <div
                                     class="group cursor-pointer overflow-hidden rounded-3xl bg-white shadow-lg transition-transform hover:scale-105 w-[280px]"
                                     on:click={() => openStaffModal(staff)}
@@ -69,6 +119,7 @@
                                         <p class="text-gray-600 mt-2">{staff.role}</p>
                                     </div>
                                 </div>
+								{/if}
                             {/each}
                         </div>
                     </div>

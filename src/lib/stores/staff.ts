@@ -12,7 +12,8 @@ export interface StaffMember {
 	id?: string;
 	name: string;
 	role: string;
-	priority: number; // Add priority field
+	isHOD?: boolean; // New field
+	priority?: number; // Optional for HOD, required for others
 	photoUrl: string;
 	email: string;
 	phone?: string;
@@ -23,13 +24,12 @@ export interface StaffMember {
 	bio: string;
 }
 
-// Add priority mapping constant
+// Update the sorting logic
 export const STAFF_PRIORITIES = {
-	'HOD': 1,
-	'Professor': 2,
-	'Associate Professor': 3,
-	'Assistant Professor': 4,
-	'Guest Faculty': 5
+	'HOD': 0, // HOD will always be first
+	'Professor': 1,
+	'Associate Professor': 2,
+	'Assistant Professor': 3
 } as const;
 
 export const staffMembers = writable<StaffMember[]>([]);
