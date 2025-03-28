@@ -102,7 +102,7 @@
                     <div class="w-full max-w-7xl">
                         <div class="flex flex-wrap justify-center gap-8">
                             {#each staffByPriority[priority] as staff}
-								{#if (staff.priority ?? 999) < 999}
+								{#if (staff.priority ?? 99) <= 99}
                                 <div
                                     class="group cursor-pointer overflow-hidden rounded-3xl bg-white shadow-lg transition-transform hover:scale-105 w-[280px]"
                                     on:click={() => openStaffModal(staff)}
